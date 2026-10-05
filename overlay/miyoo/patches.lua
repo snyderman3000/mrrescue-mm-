@@ -2,9 +2,35 @@
 -- game's own main.lua, so everything here replaces or wraps game functions;
 -- the game's source files themselves stay unmodified.
 
+local ffi = require("ffi")
 local M = require("miyoo.m2d")
 local Shim = require("miyoo.shim")
 local lg = love.graphics
+
+---------------------------------------------------------------------------
+-- clean exit
+---------------------------------------------------------------------------
+-- Letting the process wind down normally crashed on the device (exit code
+-- 139): the display thread can still be mid-frame while the SigmaStar
+-- libraries are torn down. So once the game has saved, stop audio, stop the
+-- display thread and free the screen buffers ourselves, then leave at once.
+-- (launch.sh runs sync afterwards, so the save files are safe.)
+ffi.cdef [[
+void _exit(int status);
+int fflush(void *stream);
+]]
+local realQuit = love.quit
+function love.quit()
+  if realQuit and realQuit() then return true end -- (the game never cancels)
+  if love.audio then pcall(love.audio.stop) end
+  print("[exit] saved; shutting down display")
+  io.stdout:flush()
+  M.m2d_quit()
+  print("[exit] done")
+  io.stdout:flush()
+  ffi.C.fflush(nil)
+  ffi.C._exit(0)
+end
 
 ---------------------------------------------------------------------------
 -- screen: the game always draws at 1x (256x200) and mini2d scales it

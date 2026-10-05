@@ -1,11 +1,11 @@
 Mr. Rescue for Miyoo Mini Plus (OnionOS)
-https://github.com/snyderman3000/mrrescue-miyoo
+https://github.com/snyderman3000/mrrescue-mm-
 
 UNOFFICIAL PORT. Mr. Rescue is made by Tangram Games:
 https://tangramgames.dk/games/mrrescue,
 https://github.com/SimonLarsen/mrrescue. This port is not made, endorsed or
 supported by them: please report problems at
-https://github.com/snyderman3000/mrrescue-miyoo/issues.
+https://github.com/snyderman3000/mrrescue-mm-/issues.
 The game's own Lua code is unmodified; the port adds a software renderer and
 handheld controls/options around it (see the GitHub page for details).
 
